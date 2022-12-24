@@ -11,7 +11,6 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye_tree_eyeglasses.xml')
 
 count = 0
-#alarm = pygame.mixer.Sound('alarm.mp3')
 while True:
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -25,17 +24,19 @@ while True:
             eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 5)
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-            if (len(eyes) >= 2):
+            if (len(eyes) >= 1):
+                print("Eye Open+++++++++++")
                 cv2.putText(frame, "Eyes open!", (100, 70), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+                count = 0
                 db.setdata("0")
+
             else:
                 print("Blink detected--------------")
                 count = count + 1
                 if (count >= 10):
-                    cv2.putText(frame, "Wake up you idiot!", (100, 70), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
-                    #alarm.play()
+                    cv2.putText(frame, "Wake up immediately!", (100, 70), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
                     db.setdata("1")
-                cv2.waitKey(1000)
+                cv2.waitKey(500)
 
     else:
         cv2.putText(frame, "No face detected", (100, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 2)

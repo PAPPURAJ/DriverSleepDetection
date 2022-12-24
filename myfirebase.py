@@ -19,6 +19,11 @@ myd = '1'
 
 
 def setdata(data):
-    db.child("Data").child("Sleep").set(data)
-    print("Light: ")
+    global myd
+    if myd != data:
+        db.child("Data").child("Sleep").set(data)
+        myd = data
+    print("=============================================: ")
     print(data)
+
+
